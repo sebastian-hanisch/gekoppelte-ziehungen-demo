@@ -122,7 +122,7 @@ def verdict_n_sweep(exp: dict) -> tuple[str, str]:
     ratios = [r["ratio"] for r in exp["rows"]]
     text = (f"Das Varianzverhältnis liegt bei allen N zwischen {de(min(ratios), 2)} und {de(max(ratios), 2)}; die Steigung der Streuung in der doppelt-logarithmischen "
             f"Auftragung ist {de(exp['slope_plain'], 2)} (unabhängig) und {de(exp['slope_anti'], 2)} (gespiegelt), Soll −0,50. Die Spiegelung ändert die "
-            f"Konstante, nicht die Rate. Das Rauschen der Verhältnisse bei {C.SWEEP_REPS} Wiederholungen beträgt rund {de(100 / np.sqrt(C.SWEEP_REPS / 2), 0)} %.")
+            f"Konstante, nicht die Rate. Das Rauschen der Verhältnisse bei {C.SWEEP_REPS} Wiederholungen beträgt rund {de(200 / np.sqrt(C.SWEEP_REPS - 1), 0)} %.")
     return "info", text
 
 

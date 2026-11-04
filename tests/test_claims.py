@@ -1,7 +1,7 @@
 """Jede Zahl aus der README und den App-Texten, nachgerechnet über dieselben Auswertungsfunktionen wie die App (DEMO-PLAYBOOK §4).
 
 Ströme sind fest (SplitMix64) und die Rechnung besteht aus Vergleichen und Zählungen: die Zahlen sind plattformunabhängig bis auf die letzte Stelle der
-Gleitkommasummen. Verhältnisse verrauschter Messungen haben trotzdem Bänder (Rauschen der Varianzverhältnisse bei 200 Wiederholungen: rund 10 %).
+Gleitkommasummen. Verhältnisse verrauschter Messungen haben trotzdem Bänder (Rauschen der Varianzverhältnisse bei 200 Wiederholungen: rund 14 bis 15 %).
 Zeiten stehen nie in einem Test."""
 
 import numpy as np

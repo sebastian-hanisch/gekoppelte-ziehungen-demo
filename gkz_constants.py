@@ -15,7 +15,7 @@ P_MIN, P_MAX, DEFAULT_P = 0.50, 0.99, 0.70
 N_CHOICES = (100, 300, 1000, 2000)        # Zahl der Auswertungen je Schätzung (gerade: das Paar zählt zwei)
 N_MIN, N_MAX, DEFAULT_N = N_CHOICES[0], N_CHOICES[-1], 1000
 SEED_MAX, DEFAULT_SEED = 999999, 35
-REPS = 200                                # Wiederholungen je Schätzung (feste Ströme), Rauschen der Varianzverhältnisse 1/sqrt(REPS) ≈ 7 %
+REPS = 200                                # Wiederholungen je Schätzung (feste Ströme), Rauschen der Varianzverhältnisse 2/sqrt(REPS − 1) ≈ 14 %
 
 # Experimente
 SWEEP_N = (100, 300, 1000, 3000)
@@ -42,7 +42,7 @@ PRESETS = {
 }
 PRESET_HELP = {
     "Standardfall (Voreinstellung)": "Gitter 3×4, jede Kante hält mit 70 %, 1000 Auswertungen: das Netz hängt zusammen. Mittlerer Gewinn der Spiegelung.",
-    "Kräftiger Gewinn": "Gitter 3×3, p = 0,60: hier ist die Spiegelung für das Ja-Nein-Ziel am wirksamsten.",
+    "Kräftiger Gewinn": "Gitter 3×3, p = 0,60: nahe am günstigsten p; die Spiegelung senkt die Varianz um etwa ein Viertel.",
     "Seltenes Ereignis": "Gitter 3×4, p = 0,99: der Ausfall ist selten, die Spiegelung bringt praktisch nichts.",
     "Nicht monotones Ziel": "Gitter 2×3, p = 0,60: das Ziel „genau zwei Teile“ ist nicht monoton, die Spiegelung kann dort sogar schaden.",
 }

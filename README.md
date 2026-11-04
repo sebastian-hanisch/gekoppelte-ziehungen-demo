@@ -9,14 +9,14 @@ Vehikel ist wie in Stück 1 die **Zuverlässigkeit eines Gitternetzes**: Jede Ka
 
 ## Warum dieses Problem
 
-„Spiegele die Zufallszahlen, dann sinkt die Varianz“ ist ein beliebtes Rezept, und „nimm für den Vergleich dieselben Zufallszahlen“ ein zweites. Beide stimmen nicht pauschal: Die Varianz einer Summe ist Var A + Var B + 2 Cov, die einer Differenz Var A + Var B − 2 Cov; der Gewinn ist also die **Korrelation**, und die hängt an der **Funktion** und am **Abstand der Varianten**. Dieselbe Spiegelung senkt die Varianz von u² auf ein Achtel, die eines Ja-Nein-Ziels je nach Netz nur um 18 bis 34 %, bei seltenen Ausfällen gar nicht, und verdoppelt sie bei einer um ½ symmetrischen Funktion. Gemeinsame Zufallszahlen machen die Differenz zweier Varianten um den Faktor ≈ 1/ΔR ruhiger, aber nur bei richtiger Zuordnung der Zufallszahlen.
+„Spiegele die Zufallszahlen, dann sinkt die Varianz“ ist ein beliebtes Rezept, und „nimm für den Vergleich dieselben Zufallszahlen“ ein zweites. Beide stimmen nicht pauschal: Die Varianz einer Summe ist Var A + Var B + 2 Cov, die einer Differenz Var A + Var B − 2 Cov; der Gewinn ist also die **Korrelation**, und die hängt an der **Funktion** und am **Abstand der Varianten**. Dieselbe Spiegelung senkt die Varianz von u² auf ein Achtel, die eines Ja-Nein-Ziels je nach Netz bei günstigem p nur um 17 bis 34 %, bei hohem p oder seltenen Ausfällen kaum oder gar nicht, und verdoppelt sie bei einer um ½ symmetrischen Funktion. Gemeinsame Zufallszahlen machen die Differenz zweier Varianten um einen Faktor von rund 2R(1−R)/ΔR (höchstens 0,5/ΔR) ruhiger, aber nur bei richtiger Zuordnung der Zufallszahlen.
 
 ## Befunde und Korrekturen gegenüber dem Plan
 
 Vor dem Bau wurden die Hypothesen der Gliederung an Messreihen geprüft (Vormessung im Website-Repo, `docs/planung/monte-carlo-planung/vormessung/`). Was sich geändert hat:
 
 - **„Gewinn bei monotonen Größen, Verlust bei nicht monotonen“ stimmt nur im Kern.** Für ein monotones Ziel ist ρ ≤ 0 garantiert, aber der Gewinn ist für ein Ja-Nein-Ziel klein und **verschwindet bei seltenen Ereignissen**. Ein echter Verlust (Faktor 2) entsteht erst bei einer um ½ symmetrischen Funktion; das nicht monotone Netzziel „genau zwei Teile“ schadet nur leicht (Faktor 1,13 bei 2×3, p = 0,6) und hilft bei p = 0,5 sogar kräftig.
-- **Der Gewinn hängt am Netz.** Der Plan nannte „höchstens 19 %“; das gilt für 3×4 (und 4×4). Bei p = 0,6 ist der Faktor 0,656 für 2×3, 0,746 für 3×3 und 0,813 für 3×4: kleinere Netze gewinnen mehr.
+- **Der Gewinn hängt am Netz.** Der Plan nannte „höchstens 19 %“; das gilt für 3×4 nur im p-Raster der App (bei p = 0,65 sind es 21 %, beim 4×4-Gitter 17 %). Bei p = 0,6 ist der Faktor 0,656 für 2×3, 0,746 für 3×3 und 0,813 für 3×4 (2×5: 0,824): bei kompakten Netzen gewinnt man mehr, aber nicht streng nach Kantenzahl; das Optimum liegt bei p ≈ 0,6 bis 0,65.
 - **Fehler in der Gliederung berichtigt:** Dort stand, `output-analysis-demo` (Warteschlangen 2) nutze gemeinsame Zufallszahlen nur als Hinweis. Die Demo hat ein gemessenes Experiment dazu (Faktor 63 bis 1,7 je nach Auslastung). Dieses Stück wiederholt es nicht, sondern zeigt, was dort fehlt: die **geschlossene Formel** Var(X_B − X_A) = ΔR(1−ΔR) für monoton gekoppelte Varianten, den **Entwurfsvergleich** und die **Synchronisationsfalle**.
 - **Die Falle liegt im Layout aus Stück 1:** Dort steht die Zufallszahl einer Kante an der Stelle `i·m + e` des Stroms, hängt also von der Kantenzahl m ab. Bei einer Zusatzkante verschiebt sich alles, die „gemeinsamen“ Zahlen sind unabhängig. Dieses Stück liest den Strom mit **fester Schrittweite**.
 - **Beim Bau gefunden:** Der Entwurfsvergleich braucht die Aufzählung des Netzes **mit** Zusatzkante, beim 3×4-Gitter also 18 Kanten; die Live-Grenze der Aufzählung liegt deshalb für diesen Vergleich eine Kante höher (18, 262 144 Kantenmengen).
@@ -37,7 +37,7 @@ Fünf Experimente auf dem gewählten Netz, jedes mit live berechnetem Verdikt: (
 
 ## Befunde (gemessen, keine Behauptungen)
 
-Alle Zahlen stehen in `tests/test_claims.py`; Ströme sind fest (nie ein einzelner Seed). Das Rauschen der gemessenen Varianzverhältnisse beträgt bei 200 Wiederholungen rund 10 %: Abweichungen dieser Größe sind kein Befund; deshalb steht daneben das aus der Korrelation vorhergesagte Verhältnis 1 + ρ.
+Fast alle Zahlen stehen in `tests/test_claims.py` (mit Toleranzen); Ströme sind fest (nie ein einzelner Seed). Das Rauschen der gemessenen Varianzverhältnisse beträgt bei 200 Wiederholungen rund 14 bis 15 %: Abweichungen dieser Größe sind kein Befund; deshalb steht daneben das aus der Korrelation vorhergesagte Verhältnis 1 + ρ.
 
 | Frage | Befund | Test |
 |---|---|---|
@@ -45,8 +45,8 @@ Alle Zahlen stehen in `tests/test_claims.py`; Ströme sind fest (nie ein einzeln
 | **Kräftiger Gewinn** (3×3, p = 0,60) | ρ = **−0,2545 exakt**, vorhergesagt 0,7455, gemessen 0,68; Wahrheit 0,26791; um 25 % | `test_preset_kraeftiger_gewinn_exakt` |
 | **Seltenes Ereignis** (3×4, p = 0,99, N = 2000) | Wahrheit 0,99958, ρ ≈ −0,0004, vorhergesagt **0,9996**, gemessen 1,05 (Rauschen): praktisch nichts | `test_preset_seltenes_ereignis` |
 | **Nicht monotones Ziel** („genau zwei Teile“, 2×3, p = 0,60) | ρ = **+0,1312 exakt**, vorhergesagt 1,1312, gemessen 1,18; Wahrheit 0,34836; die Spiegelung **erhöht** die Varianz um 13 % | `test_preset_nicht_monotones_ziel_exakt` |
-| Ändert die Spiegelung die Rate? (3×4, p = 0,70, N = 100 / 300 / 1000 / 3000) | Varianzverhältnis 0,57 / 0,74 / 0,84 / 0,75 (Rauschen etwa 14 %); ρ zwischen −0,21 und −0,17 bei allen N; Steigung der Streuung −0,50 (unabhängig) und −0,46 (gespiegelt), Soll −0,50: die **Konstante** ändert sich, nicht die Rate | `test_experiment_1_verhaeltnisse_und_steigung` |
-| Gewinn gegen p (3×4, aus je 100 000 Paaren), p = 0,5 / 0,6 / 0,7 / 0,8 / 0,9 / 0,95 / 0,99 | Varianzfaktor **0,936 / 0,813 / 0,814 / 0,916 / 0,985 / 0,993 / 0,9996**; am kleinsten bei p = 0,6 | `test_experiment_2_kurve_fuer_3x4_aus_paaren` |
+| Ändert die Spiegelung die Rate? (3×4, p = 0,70, N = 100 / 300 / 1000 / 3000) | Varianzverhältnis 0,57 / 0,74 / 0,84 / 0,75 (Rauschen etwa 14 bis 15 %); ρ zwischen −0,21 und −0,17 bei allen N; Steigung der Streuung −0,50 (unabhängig) und −0,46 (gespiegelt), Soll −0,50: die **Konstante** ändert sich, nicht die Rate | `test_experiment_1_verhaeltnisse_und_steigung` |
+| Gewinn gegen p (3×4, aus je 100 000 Paaren), p = 0,5 / 0,6 / 0,7 / 0,8 / 0,9 / 0,95 / 0,99 | Varianzfaktor **0,936 / 0,813 / 0,814 / 0,916 / 0,985 / 0,993 / 0,9996**; am kleinsten im Bereich p = 0,6 bis 0,7 (die beiden Werte unterscheiden sich weniger als der Schätzfehler; mit je 4 Millionen Paaren liegt das Optimum um p = 0,65 bei 0,79) | `test_experiment_2_kurve_fuer_3x4_aus_paaren` |
 | dasselbe, 3×3 (exakt aufgezählt) | 0,882 / 0,746 / 0,789 / 0,904 / 0,981 / 0,996 / 0,9999 | `test_experiment_2_kurve_fuer_3x3_exakt` |
 | Gewinn hängt am Netz (p = 0,6, exakt bzw. aus Paaren) | 2×3: **0,656**, 3×3: **0,746**, 3×4: 0,813 | `test_gewinn_haengt_am_netz_bei_p_gleich_0_6` |
 | Pfad, geschlossene Formel | m = 3, p = 0,6: ρ = −0,2283; m = 5, p = 0,8: −0,1344; m = 1: ρ = −(1−p)/p = −0,25 bei p = 0,8; stimmt mit der Aufzählung überein | `test_pfad_geschlossene_formel_zahlen` |
@@ -55,14 +55,14 @@ Alle Zahlen stehen in `tests/test_claims.py`; Ströme sind fest (nie ein einzeln
 | „Genau zwei Teile“, 3×3 (exakt) | ρ = +0,0268 bei p = 0,6 und +0,0024 bei p = 0,7: nur leicht positiv | `test_exakte_paarkorrelation_bei_zwei_teilen_3x3_ist_klein_positiv` |
 | Gemeinsame Zufallszahlen, p gegen p + δ (3×4, p = 0,70, je 100 000 Ziehungen), δ = 0,2 / 0,1 / 0,05 / 0,02 / 0,01 | Gewinnfaktor nach der Formel ΔR(1−ΔR): **1,2 / 2,12 / 3,84 / 8,92 / 17,38**; gemessen 1,2 / 2,11 / 3,82 / 8,79 / 17,0; Formel und Messung der Varianz weichen höchstens 3 % ab | `test_experiment_4_gewinn_gegen_delta_und_entwurfsvergleich` |
 | Entwurfsvergleich: Kante 0–5 ins 3×4-Gitter (p = 0,70) | R = 0,4560 → 0,5079, ΔR = 0,0519; Gewinnfaktor **10,1**; Korrelation der beiden Ziele 0,90 | dasselbe |
-| Synchronisationsfalle (dieselbe Zusatzkante) | feste Zuordnung: Korrelation **0,903**, Varianz der Differenz 0,0485; Zuordnung nach Lage im Strom: Korrelation **−0,002**, Varianz 0,4988 (unabhängig 0,4980), also **10,3-mal** so groß; der Mittelwert bleibt unverzerrt (0,0518 gegen 0,0511) | `test_experiment_5_synchronisationsfalle` |
+| Synchronisationsfalle (dieselbe Zusatzkante) | feste Zuordnung: Korrelation **0,903**, Varianz der Differenz 0,0485; Zuordnung nach Lage im Strom: Korrelation **−0,002**, Varianz 0,4988 (unabhängig 0,4980), also **10,3-mal** so groß (in dieser Einstellung; der Verlust ist der Gewinnfaktor des Entwurfsvergleichs, die Streuung ist so groß wie ohne Kopplung); der Mittelwert bleibt unverzerrt (0,0518 gegen 0,0511) | `test_experiment_5_synchronisationsfalle` |
 | Spielwiese, Standardnetz (0-1, 1-2, 2-3, 3-0, 0-2) | Wahrheit 0,77518, ρ = −0,1971 (exakt), Faktor 0,803; Zusatzkante 1–3: R 0,7752 → 0,8925, ΔR = 0,1173, Gewinnfaktor 2,61 | `test_spielwiese_standardnetz` |
 
 ## Ehrliche Grenzen
 
 - **Nur an erfundenen Gittern und Funktionen geprüft.** Die Wahrheit ist exakt, ob die Aussagen auf reale Simulationen übertragbar sind, zeigt die Demo nicht.
-- **Der Gewinn für ein Ja-Nein-Ziel ist klein.** Das ist ein Befund, kein Mangel: Die Spiegelung ist für glatte Größen stark (u²), für Schwellenfunktionen schwach. Für das Ja-Nein-Ziel gibt es bessere Wege (bedingtes Monte Carlo, Stück 6; Importance Sampling bei seltenen Ereignissen, Stück 7).
-- **Die exakte Korrelation gibt es nur bis 12 Kanten** (3^12 = 531 441 Kategorienfolgen); für das 2×5- und das 3×4-Gitter wird ρ aus 100 000 Paaren geschätzt (Rauten im Experiment 2). Das Varianzverhältnis aus 200 Wiederholungen rauscht um rund 10 %, beim kleinsten N (100) um etwa 14 %.
+- **Der Gewinn für ein Ja-Nein-Ziel ist klein.** Das ist ein Befund, kein Mangel: Die Spiegelung ist für glatte Größen stark (u²), für Schwellenfunktionen vieler Zufallszahlen (wie das Netzziel) schwach. Für das Ja-Nein-Ziel gibt es bessere Wege (bedingtes Monte Carlo, Stück 6; Importance Sampling bei seltenen Ereignissen, Stück 7).
+- **Die exakte Korrelation gibt es nur bis 12 Kanten** (3^12 = 531 441 Kategorienfolgen); für das 2×5- und das 3×4-Gitter wird ρ aus 100 000 Paaren geschätzt (Rauten im Experiment 2). Das Varianzverhältnis aus 200 Wiederholungen rauscht um rund 14 bis 15 %, auch bei N = 100.
 - **Die Formel ΔR(1−ΔR) gilt nur für monoton gekoppelte Varianten** (p und p + δ, eine Kante mehr). Für Vergleiche, in denen die eine Variante nicht überall besser ist, gibt es sie nicht.
 - **Das Ziel „genau zwei Teile“ ist nur ein Beispiel** eines nicht monotonen Ziels, mit kleinem Verlust. Der große Verlust (Faktor 2) steckt in der symmetrischen Skalarfunktion.
 - **Experimente 4 und 5 nutzen das Ziel „zusammenhängend“**, da dort die Kopplung monoton ist.

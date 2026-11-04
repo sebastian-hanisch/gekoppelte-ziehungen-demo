@@ -44,7 +44,7 @@ def test_spread_verdikt_nennt_die_quelle_der_korrelation():
 def test_n_sweep_verdikt():
     exp = {"rows": [{"ratio": 0.8}, {"ratio": 0.9}, {"ratio": 0.85}], "slope_plain": -0.5, "slope_anti": -0.49, "rho_exact": -0.15}
     kind, text = ev.verdict_n_sweep(exp)
-    assert kind == "info" and "zwischen 0,80 und 0,90" in text and "−0,50 (unabhängig) und −0,49 (gespiegelt)" in text and "Konstante, nicht die Rate" in text and "10 %" in text
+    assert kind == "info" and "zwischen 0,80 und 0,90" in text and "−0,50 (unabhängig) und −0,49 (gespiegelt)" in text and "Konstante, nicht die Rate" in text and "rund 14 %" in text
 
 
 def test_rho_kurve_verdikt():

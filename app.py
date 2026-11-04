@@ -140,7 +140,7 @@ m1, m2, m3, m4 = st.columns(4)
 m1.metric("Wahrheit", de(a.truth, 4), help=f"Exakte Wahrscheinlichkeit des Ziels „{C.TARGETS[settings.ziel]}“ im {a.netz.name} bei p = {de(settings.p, 2)} (Aufzählung aller Kantenmengen).")
 m2.metric("Streuung (unabh.)", de(a.sd_plain, 5), help=f"Standardabweichung von {C.REPS} Schätzungen aus je {de(settings.n, 0)} unabhängigen Auswertungen.")
 m3.metric("Streuung (Paare)", de(a.sd_anti, 5), help=f"Standardabweichung von {C.REPS} Schätzungen aus je {de(settings.n // 2, 0)} gespiegelten Paaren (ebenfalls {de(settings.n, 0)} Auswertungen).")
-m4.metric("Varianzverhältnis", de(a.var_ratio, 2), help="Varianz gespiegelt geteilt durch Varianz unabhängig; unter 1 ist ein Gewinn. Das Rauschen bei 200 Wiederholungen beträgt rund 10 %.")
+m4.metric("Varianzverhältnis", de(a.var_ratio, 2), help="Varianz gespiegelt geteilt durch Varianz unabhängig; unter 1 ist ein Gewinn. Das Rauschen bei 200 Wiederholungen beträgt rund 14 bis 15 %.")
 rho_text = f"ρ = {de(a.rho_exact, 3)} (exakt aufgezählt)" if a.rho_exact is not None else f"ρ = {de(a.rho, 3)} (aus den gezogenen Paaren)"
 st.caption(f"Vorhergesagtes Varianzverhältnis 1 + ρ = {de(a.predicted_ratio, 2)}; {rho_text}.")
 st.plotly_chart(build_spread(a), width="stretch", key="main_chart")
@@ -274,7 +274,7 @@ st.markdown(
 | **Die Funktion ist monoton in den Zufallszahlen** | Nur dann ist ρ ≤ 0 garantiert. Bei symmetrischen Funktionen verdoppelt die Spiegelung die Varianz (Experiment 3); beim Netzziel „genau zwei Teile“ kann sie leicht schaden. | – |
 | **Das Ereignis ist nicht selten** | Bei seltenen Ausfällen verschwindet der Gewinn der Spiegelung (Experiment 2). | Stück 7 (Importance Sampling) |
 | **Ein Ja-Nein-Ziel lässt sich glätten** | Der Gewinn für ein Ja-Nein-Ziel ist klein; für eine glatte Größe ist er viel größer (Experiment 3, u²). | Stück 6 (bedingtes Monte Carlo) |
-| **Gleiche Zufallszahlen bedeuten gleiche Zuordnung** | Bei verschobenem Strom sind die „gemeinsamen“ Zahlen unabhängig, der Mittelwert bleibt unverzerrt, die Streuung wird zehnmal so groß (Experiment 5). | – |
+| **Gleiche Zufallszahlen bedeuten gleiche Zuordnung** | Bei verschobenem Strom sind die „gemeinsamen“ Zahlen unabhängig, der Mittelwert bleibt unverzerrt, die Streuung wird so groß wie ohne Kopplung (im Standardfall zehnmal so groß, Experiment 5). | – |
 | **Die Varianten sind monoton gekoppelt** | Nur dann gilt Var(X_B − X_A) = ΔR(1−ΔR) und der Gewinn wächst mit 1/ΔR. Für nicht monotone Vergleiche gibt es diese Formel nicht. | Stück 11 (Gradienten schätzen) |
 | **Bessere Verfahren der Aufteilung** | Spiegelung ist die einfachste Schichtung mit zwei Teilen. | Stück 5 (Schichtung, Latin Hypercube) |
 """
@@ -287,7 +287,7 @@ with st.expander("⚠️ Annahmen, Grenzen und bekannte Probleme"):
 
 **Grenzen.** Aufgezählt wird live bis 17 Kanten; die exakte Korrelation eines Paares (3^m Kategorien) nur bis 12 Kanten, darüber schätzt die App sie aus 100 000 Paaren (Rauten im Experiment 2). Die Experimente 1 bis 5 laufen auf dem gewählten Netz; Experiment 4 und 5 nutzen das Ziel „zusammenhängend“, da die Formel ΔR(1−ΔR) nur für monotone Kopplungen gilt. Zeiten werden nicht gemessen, nur die Zahl der Auswertungen.
 
-**Bekannte Probleme und Unsicherheiten.** Das Varianzverhältnis aus 200 Wiederholungen rauscht um rund 10 %; deshalb zeigt die App daneben das aus der Korrelation vorhergesagte Verhältnis 1 + ρ. Die Verhältnisse in Experiment 1 rauschen ebenso. Die Literaturangaben im Mathematik-Expander stammen aus dem Gedächtnis und sind nicht eingesehen. Die Oberfläche ist mit AppTest geprüft und im Browser angesehen, nicht mit echtem Mausklick auf jedem Gerät.
+**Bekannte Probleme und Unsicherheiten.** Das Varianzverhältnis aus 200 Wiederholungen rauscht um rund 14 bis 15 %; deshalb zeigt die App daneben das aus der Korrelation vorhergesagte Verhältnis 1 + ρ. Die Verhältnisse in Experiment 1 rauschen ebenso. Die Literaturangaben im Mathematik-Expander stammen aus dem Gedächtnis und sind nicht eingesehen. Die Oberfläche ist mit AppTest geprüft und im Browser angesehen, nicht mit echtem Mausklick auf jedem Gerät.
         """
     )
 
