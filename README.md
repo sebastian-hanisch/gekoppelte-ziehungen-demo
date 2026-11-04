@@ -1,7 +1,6 @@
 # Gekoppelte Ziehungen: antithetische Paare und gemeinsame Zufallszahlen – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-gekoppelte-ziehungen-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-gekoppelte-ziehungen-demo.streamlit.app/)**
 
 Zweites Stück der Linie **„Monte-Carlo-Schätzung und Varianzreduktion“** in der „Konzepte“-Reihe für die Website „Sebastian Hanisch – Operations Research und Machine Learning“ (die Linie wird erst vollständig veröffentlicht). Nachfolger von [monte-carlo-schaetzer-demo](https://github.com/sebastian-hanisch/monte-carlo-schaetzer-demo): Dort stand der Schätzer mit seinem Fehler, hier wird bei gleichem Aufwand **die Varianz gesenkt**, indem dieselben Zufallszahlen **gekoppelt** werden. Zwei Kopplungen mit derselben Währung, der **Korrelation**: Ein **gespiegeltes Paar** (u und 1−u) macht sie *innerhalb* einer Schätzung negativ, **gemeinsame Zufallszahlen** machen sie *zwischen* zwei Schätzungen positiv.
 
@@ -132,4 +131,4 @@ Gebaut mit Streamlit, Plotly, NumPy und fpdf2.
 
 ---
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Monte-Carlo-Schätzung: vom Schätzer zur Wahl](https://sebastianhanisch.net/konzepte-monte-carlo.html).
